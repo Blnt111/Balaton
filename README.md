@@ -1,1 +1,1 @@
-# Balaton
+# Balatoni látnivalók alkalmazás

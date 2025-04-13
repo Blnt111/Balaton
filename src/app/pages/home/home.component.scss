@@ -1,0 +1,56 @@
+
+
+$primary-color: #2980b9; // Balaton-kék
+$hover-color: #1f6392;   // Mélyebb tónus hoverre
+$text-color: #ffffff;    // Fehér szöveg
+$overlay-color: rgba(0, 64, 128, 0.5); // Kékes áttetsző háttér
+
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  background-image: url('/images/hatterek/balaton_hatter4.jpg');
+  background-size: cover;
+  background-position: center;
+  color: $text-color;
+  position: relative;
+}
+
+.content {
+  background-color: $overlay-color;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 500px;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 15px;
+  color: $text-color;
+}
+
+p {
+  font-size: 1.4em;
+  margin-bottom: 30px;
+  color: $text-color;
+}
+/*
+.explore-button {
+  background-color: $primary-color;
+  color: $text-color;
+  padding: 12px 24px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.explore-button:hover {
+  background-color: $hover-color;
+}
+*/

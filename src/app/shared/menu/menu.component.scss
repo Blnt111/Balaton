@@ -1,0 +1,43 @@
+/*
+nav {
+    background-color: #405fbe;
+    width: 100%;
+}
+
+ul{
+    display: flex;
+    list-style: none;
+    align-items: center;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    gap: 200px;
+    height: 50px;
+}
+
+a{
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+}
+*/
+
+a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    border-radius: 0 !important;
+}
+
+.mdc-list-item:focus::before {
+    opacity: 0 !important;
+}
+
+.active-list-item {
+    background-color: rgba(90, 74, 247, 0.3);
+    color: white;
+    font-weight: bold;
+}
+
+mat-nav-list {
+    min-width: 200px;
+}

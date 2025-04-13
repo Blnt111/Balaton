@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="header">
+      <h2>{{ title }}</h2>
+      <div class="input-gruop">
+        <input type="text" placeholder="Adj hozzá egy új várost:" [(ngModel)]="ujvarosnev">
+        <input type="text" placeholder="Adj meg egy leírást" [(ngModel)]="ujvarosleiras">
+        <button (click)="addLatnivalo()">Hozzáad</button>
+      </div>
+    </div>
+  
+    <mat-accordion>
+      @for (latnivalo of latnivalok; track trackById($index, latnivalo)) {
+        <mat-expansion-panel class="city-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ latnivalo.v_name }}
+            </mat-panel-title>
+  
+            <mat-panel-description>
+              <mat-icon
+                class="heart-icon"
+                (click)="togglekedvenc(latnivalo); $event.stopPropagation()"
+                [color]="latnivalo.kedvenc ? 'warn' : ''">
+                {{ latnivalo.kedvenc ? 'favorite' : 'favorite_border' }}
+              </mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+  
+          <div class="panel-content">
+            <p><strong>Leírás:</strong> {{ latnivalo.leiras }}</p>
+          </div>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </div>
+  
+  

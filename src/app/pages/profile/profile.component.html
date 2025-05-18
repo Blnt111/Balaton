@@ -1,11 +1,35 @@
-<div class="container">
-    <div class="adatok">
-        <h2>Adataim</h2>
-        <p>Felhasználónév: Kiskutya3333</p>
-        <p>Email: Kiskutya3333gmail.com</p>
-    </div>
-    <div class="kedvencek">
-        <h3>Kedvencek</h3>
-        <p>Kedvencek...</p>
-    </div>
+
+<div class="container" *ngIf="user; else loadingOrError">
+  <mat-card class="adatok">
+    <mat-card-header>
+      <mat-card-title> Név: {{ user.name.firstname }} {{ user.name.lastname }}</mat-card-title>
+      <mat-card-subtitle>Email cím: {{ user.email }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <h3>Kedvencek:</h3>
+      <div *ngIf="kedvencek.length > 0; else noFavorites">
+        <ul>
+          <li *ngFor="let latnivalo of kedvencek">
+            {{ latnivalo.kedvenc }}
+          </li>
+        </ul>
+      </div>
+      <ng-template #noFavorites>
+        <p>Nincsenek kedvenceid még.</p>
+      </ng-template>
+    </mat-card-content>
+
+  </mat-card>
 </div>
+
+<ng-template #loadingOrError>
+  <div *ngIf="isLoading; else errorTemplate">
+    <p>Profil betöltése folyamatban...</p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</ng-template>
+
+<ng-template #errorTemplate>
+  <p>Hiba történt a profil betöltésekor.</p>
+</ng-template>

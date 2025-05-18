@@ -1,37 +1,51 @@
-<div class="container">
-    <div class="header">
-      <h2>{{ title }}</h2>
-      <div class="input-gruop">
-        <input type="text" placeholder="Adj hozzá egy új várost:" [(ngModel)]="ujvarosnev">
-        <input type="text" placeholder="Adj meg egy leírást" [(ngModel)]="ujvarosleiras">
-        <button (click)="addLatnivalo()">Hozzáad</button>
+
+<mat-card class="city-panel">
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <!-- Űrlap város hozzáadásához -->
+    <form [formGroup]="varosForm" (ngSubmit)="addLatnivalo()" class="form">
+      <mat-form-field>
+        <mat-label>Város neve</mat-label>
+        <input matInput formControlName="v_name" placeholder="Város neve">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Leírás</mat-label>
+        <input matInput formControlName="leiras" placeholder="Leírás">
+      </mat-form-field>
+
+      <div>
+        <button mat-flat-button color="primary" type="submit" class="add-button">Hozzáadás</button>
       </div>
-    </div>
-  
-    <mat-accordion>
-      @for (latnivalo of latnivalok; track trackById($index, latnivalo)) {
-        <mat-expansion-panel class="city-panel">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              {{ latnivalo.v_name }}
-            </mat-panel-title>
-  
-            <mat-panel-description>
-              <mat-icon
-                class="heart-icon"
-                (click)="togglekedvenc(latnivalo); $event.stopPropagation()"
-                [color]="latnivalo.kedvenc ? 'warn' : ''">
-                {{ latnivalo.kedvenc ? 'favorite' : 'favorite_border' }}
-              </mat-icon>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-  
-          <div class="panel-content">
-            <p><strong>Leírás:</strong> {{ latnivalo.leiras }}</p>
-          </div>
-        </mat-expansion-panel>
-      }
+    </form>
+
+
+    <!-- Expansion panelek listája -->
+    <mat-accordion multi>
+      <mat-expansion-panel *ngFor="let latnivalo of latnivalok">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ latnivalo.v_name }}
+          </mat-panel-title>
+
+          <mat-panel-description>
+            <button mat-icon-button color="warn"
+             (click)="togglekedvenc(latnivalo); $event.stopPropagation()"
+              aria-label="Kedvenc kapcsoló">
+              <mat-icon>{{ latnivalo.kedvenc ? 'favorite' : 'favorite_border' }}</mat-icon>
+            </button>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- Panel tartalma (leírás) -->
+        <div class="panel-content">
+          {{ latnivalo.leiras }}
+        </div>
+      </mat-expansion-panel>
     </mat-accordion>
-  </div>
-  
-  
+  </mat-card-content>
+</mat-card>

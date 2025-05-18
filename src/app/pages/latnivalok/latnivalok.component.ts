@@ -1,77 +1,110 @@
+
+
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { Latnivalo } from '../../shared/varosok/varos';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { LatnivalokService } from '../../shared/services/latnivalok.service';
 
-export interface Latnivalo {
-  id: number;
-  v_name: string;
-  leiras: string;
-  kedvenc: boolean;
-}
 
 @Component({
   selector: 'app-latnivalok',
   imports: [
-    MatIconModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatInputModule,
+    MatSelectModule,
     MatButtonModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatExpansionModule,
     FormsModule,
-    CommonModule,
-    MatExpansionModule
+    CommonModule
   ],
+  providers: [FormBuilder],
   templateUrl: './latnivalok.component.html',
-  styleUrl: './latnivalok.component.scss'
+  styleUrl: './latnivalok.component.scss',
+  //standalone: true
 })
-export class LatnivalokComponent {
-
-  @Input() title: string = 'Látnivalók';
-  @Output() latnivaloAdded = new EventEmitter<Latnivalo>();
+export class LatnivalokComponent implements OnInit{
 
 
-  ujvarosnev: string = '';
-  ujvarosleiras: string= '';
+  title: string = 'Látnivalók';
 
+  displayedColumns: string[] = ['kedvenc', 'v_name', 'leiras'];
+  varosForm!: FormGroup;
+  latnivalok: Latnivalo[] = []
 
-  latnivalok: Latnivalo[] = [
-    {
-      id: 1,
-      v_name: 'Siófok',
-      leiras: 'Siófok a Balaton déli partján található, és nyáron tökéletes úti cél azok számára, akik a pihenésre és szórakozásra is vágynak. A város híres a strandjairól, melyek a napozásra és a vízi sportokra is ideálisak. Siófokon rengeteg szórakozási lehetőség vár, mint például éttermek, és a híres Balaton Sound fesztivál.',
-      kedvenc: false
-    },
-    {
-      id: 2,
-      v_name: 'Balatonföldvár',
-      leiras: 'Balatonföldvár a Balaton déli partjának egyik gyöngyszeme, amely nyáron ideális választás mind a családok, mind a fiatalok számára. A város híres a rendezett strandjairól, a csodálatos naplementékről és a hangulatos sétányokról. A kikötő és a vitorlás élet központja, de emellett rengeteg étterem és kávézó is várja a látogatókat.',
-      kedvenc: false
-    },
-    {
-      id: 3,
-      v_name: 'Balatonboglár',
-      leiras: 'Balatonboglár egy nyugodt, de mégis pezsgő város. A város tengerpartja tökéletes helyszín a pihenéshez és a vízi sportokhoz. A híres "Szőlőhegy" és a kilátó fantasztikus panorámát kínál a Balatonra, míg a város központjában hangulatos éttermek várják a látogatókat. Balatonboglár a fiatalok körében is népszerű, hiszen a város nyáron több szórakoztató rendezvénynek is helyet ad.',
-      kedvenc: false 
-    }
-  ]
+  isLoading = false;
 
+  constructor(
+    private fb: FormBuilder,
+    private latnivaloService: LatnivalokService
+  ) {}
 
-  addLatnivalo(): void{
-    if (this.ujvarosnev.trim()){
-      const ujvaros: Latnivalo = {
-        id: this.latnivalok.length+1,
-        v_name: this.ujvarosnev.trim(),
-        leiras: this.ujvarosleiras.trim(),
-        kedvenc: false
-      };
-
-      this.latnivalok.push(ujvaros);
-      this.latnivaloAdded.emit(ujvaros);
-      this.ujvarosnev = '';
-      this.ujvarosleiras = '';
-    }
+  ngOnInit(): void {
+    this.initializeForm();
+    this.loadLatnivalok();
   }
 
+  initializeForm(): void {
+    this.varosForm = this.fb.group({
+      v_name: ['', [Validators.required]],
+      leiras: ['', [Validators.required, Validators.maxLength(350)]]
+    });
+  }
+
+  loadLatnivalok(): void {
+    this.latnivaloService.getAllLatnivalok().subscribe(latnivalok => {
+      this.latnivalok = latnivalok;
+      console.log('Latnivalok loaded with observable');
+    });
+  }
+
+  addLatnivalo(): void{
+    if (this.varosForm.valid) {
+      this.isLoading = true;
+      const formValue = this.varosForm.value;
+      
+      const newLatnivalo: Omit<Latnivalo, 'id'> = {
+        v_name: formValue.v_name,
+        leiras: formValue.leiras,
+        kedvenc: false
+      };
+      
+
+      this.latnivaloService.addLatnivalo(newLatnivalo)
+        .then(addedLatnivalo => {
+          console.log('New Varos added with promise', addedLatnivalo);
+          
+          this.varosForm.reset();
+          
+          this.loadLatnivalok();
+        })
+        .finally(() => {
+          this.isLoading = false;
+        }); 
+      } else {
+        Object.keys(this.varosForm.controls).forEach(key => {
+          const control = this.varosForm.get(key);
+          control?.markAsTouched();
+      });
+    }
+  }
 
   togglekedvenc(latnivalo: Latnivalo): void{
     latnivalo.kedvenc = !latnivalo.kedvenc;
@@ -80,6 +113,4 @@ export class LatnivalokComponent {
   trackById(index: number, item: Latnivalo): number {
     return item.id;
   }
-
-
 }

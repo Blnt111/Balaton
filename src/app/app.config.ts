@@ -21,3 +21,6 @@ export const appConfig: ApplicationConfig = {
   provideFirestore(() => getFirestore()),
   ]
 };
+
+
+

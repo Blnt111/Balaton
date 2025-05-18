@@ -10,3 +10,5 @@ export interface User {
     password: string;
     kedvencek: Latnivalo[];
   }
+
+  

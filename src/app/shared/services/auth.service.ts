@@ -80,3 +80,5 @@ export class AuthService {
     localStorage.setItem('isLoggedIn', isLoggedIn ? 'true' : 'false');
   }
 }
+
+

@@ -114,3 +114,5 @@ export class LatnivalokComponent implements OnInit{
     return item.id;
   }
 }
+
+

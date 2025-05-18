@@ -4,3 +4,4 @@ export interface Latnivalo {
     leiras: string;
     kedvenc: boolean;
 }
+

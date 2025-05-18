@@ -21,3 +21,5 @@ describe('GaleriaComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
